@@ -1,44 +1,27 @@
-const express = require('express');
-const app = express();
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
+// IMPORTS
+const express       = require('express');
+const app           = express();
+const bodyParser    = require('body-parser');
+const mongoose      = require('mongoose');
+const Campground    = require('./models/campground');
+const seedDB        = require('./seeds');
 
-// fix all deprecation warnings
+// mongoose config
+// fix all mongodb deprecation warnings
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 //connect to the database
 mongoose.connect("mongodb://localhost/yelp_camp");
 
+// app config
 app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine', 'ejs');
 
-// SCHEMA SETUP
-var campgroundSchema = new mongoose.Schema({
-    name: String,
-    image: String,
-    description: String
-});
+// seed the database
+//seedDB();
 
-// Compile shcema into model
-var Campground = mongoose.model("Campground", campgroundSchema);
-
-//create new campground
-// Campground.create({
-//     name: "Mountain Goat's Rest", 
-//     image: "https://farm1.staticflickr.com/82/225912054_690e32830d.jpg", 
-//     description: `Fetal stemcells, aren't those controversial? I never loved you. Well, let's just dump it in the sewer and say we delivered it. Why yes! Thanks for noticing.
-//     You've killed me! Oh, you've killed me! Shut up and get to the point! Oh dear! She's stuck in an infinite loop, and he's an idiot! Well, that's love for you. I'm Santa Claus! Well, let's just dump it in the sewer and say we delivered it.`
-// }, function(err, campground){
-//     if (err) {
-//         console.log(err);
-//     } else {
-//         console.log("Newly created campground: ");
-//         console.log(campground);
-//     }
-// });
-
-// root route
+// ROOT route
 app.get('/', (req, res) => {
     res.render('landing');
 })
@@ -85,7 +68,7 @@ app.get('/campgrounds/new', (req, res) => {
 // SHOW route
 app.get('/campgrounds/:id', (req, res) => {
     // find campground with provided id
-    Campground.findById(req.params.id, (err, foundCampground) => {
+    Campground.findById(req.params.id).populate('comments').exec( (err, foundCampground) => {
         if (err) {
             console.log(err);
         } else {
