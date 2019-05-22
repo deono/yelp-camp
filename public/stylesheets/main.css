@@ -1,0 +1,9 @@
+/* public/stylesheets/main.css */
+
+.thumbnail img {
+    width: 100%;
+}
+
+.thumbnail {
+    padding: 0;
+}
