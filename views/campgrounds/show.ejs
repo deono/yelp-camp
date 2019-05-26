@@ -22,9 +22,9 @@
                     <p><%=campground.description%></p>
                     <p><em>Submitted by: <strong><%= campground.author.username %></strong></em></p>
                     <% if(currentUser && campground.author.id.equals(currentUser._id)) { %>
-                        <a class="btn btn-sm btn-warning" href="/campgrounds/<%= campground._id %>/edit">Edit</a>
+                        <a class="btn btn-xs btn-warning" href="/campgrounds/<%= campground._id %>/edit">Edit</a>
                         <form class="delete-form" action="/campgrounds/<%= campground._id %>?_method=DELETE" method="post">
-                            <button class="btn btn-sm btn-danger" type="submit">Delete</button>
+                            <button class="btn btn-xs btn-danger" type="submit">Delete</button>
                         </form>
                     <% } %>
                 </div>
@@ -39,11 +39,13 @@
                     <div class="col-md-12">
                         <em><strong><%= comment.author.username %></strong></em>
                         <span class="pull-right">10 days ago</span>
-                        <p><%= comment.text %></p> 
-                        <a class="btn btn-xs btn-warning" href="/campgrounds/<%= campground._id %>/comments/<%= comment._id %>/edit">Edit</a>
-                        <form class="delete-form" action="/campgrounds/<%= campground._id %>/comments/<%= comment._id %>?_method=DELETE" method="post">
-                            <button class="btn btn-xs btn-danger" type="submit">Delete</button>
-                        </form>
+                        <p><%= comment.text %></p>
+                        <% if(currentUser && comment.author.id.equals(currentUser._id)) { %>
+                            <a class="btn btn-xs btn-warning" href="/campgrounds/<%= campground._id %>/comments/<%= comment._id %>/edit">Edit</a>
+                            <form class="delete-form" action="/campgrounds/<%= campground._id %>/comments/<%= comment._id %>?_method=DELETE" method="post">
+                                <button class="btn btn-xs btn-danger" type="submit">Delete</button>
+                            </form>
+                            <% } %>
                     </div>
                 </div>
                 <% }); %>
