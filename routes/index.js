@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 const User = require('../models/user');
+
 // ==================================================================================
 // ROOT ROUTE =======================================================================
 // ==================================================================================
@@ -25,10 +26,12 @@ router.post('/register', (req, res) => {
     var newUser = new User({ username : req.body.username });
     User.register(newUser, req.body.password, (err, user) => {
         if(err) {
-            console.log(err);
-            return res.render('register');
+            //console.log(err.message);
+            req.flash('error', err.message);
+            return res.redirect('/register');
         }
         passport.authenticate('local')(req, res, () => {
+            req.flash('success', 'Welcome to YelpCamp, ' + user.username + ' !')
             res.redirect('/campgrounds');
         });
     });
@@ -37,8 +40,9 @@ router.post('/register', (req, res) => {
 // LOGIN ROUTES 
 // SHOW login form
 router.get('/login', (req, res) => {
-    res.render('login');
+    res.render('login', {message: req.flash('error')});
 });
+
 // handle login logic
 router.post('/login', passport.authenticate('local', 
 {   
@@ -51,15 +55,8 @@ router.post('/login', passport.authenticate('local',
 // LOGOUT ROUTE
 router.get('/logout', (req, res) => {
     req.logout();
+    req.flash('success', 'Logged you out!');
     res.redirect('/campgrounds');
 });
-
-// MIDDLEWARE - check if user is logged in
-function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated()) {
-        return next();
-    }
-    res.redirect('/login');
-}
 
 module.exports = router;
