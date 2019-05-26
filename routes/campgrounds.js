@@ -22,12 +22,21 @@ router.get('/campgrounds', (req, res) => {
 
 // CREATE route
 // Add a new campground to DB
-router.post('/campgrounds', (req, res) => {    
+router.post('/campgrounds', isLoggedIn, (req, res) => {    
     // get data from form 
     var name = req.body.name;
     var image = req.body.image;
     var desc = req.body.description;
-    var newCampground = {name: name, image: image, description: desc};
+    var author = {
+        id: req.user._id,
+        username: req.user.username
+    };
+    var newCampground = {
+        name: name,
+        image: image,
+        description: desc,
+        author: author
+    };
     // create new campground and save to database
     Campground.create(newCampground, (err, newlyCreated) => {
         if (err) {
@@ -41,7 +50,7 @@ router.post('/campgrounds', (req, res) => {
 
 // NEW route
 // display form to make new campground
-router.get('/campgrounds/new', (req, res) => {
+router.get('/campgrounds/new', isLoggedIn, (req, res) => {
     res.render('campgrounds/new');
 });
 
@@ -57,5 +66,13 @@ router.get('/campgrounds/:id', (req, res) => {
         }
     })
 });
+
+// MIDDLEWARE - check if user is logged in
+function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect('/login');
+}
 
 module.exports = router;

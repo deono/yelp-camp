@@ -1,9 +1,13 @@
+// seeds.js
+
 //import mongoose
 const mongoose = require('mongoose');
 // import Campgound model
 const Campground = require('./models/campground');
 // import Comment model
 const Comment = require ('./models/comment');
+// import user model
+//const User = require('./models/user');
 
 //seed data array
 const data = [
@@ -65,6 +69,7 @@ function seedDB() {
         }
     });
 }
+
 
 // export seedDB function
 module.exports = seedDB;

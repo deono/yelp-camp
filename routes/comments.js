@@ -7,14 +7,16 @@ const Comment = require('../models/comment');
 // COMMENT ROUTES ===================================================================
 // ==================================================================================
 
- // NEW route
- router.get('/campgrounds/:id/comments/new', isLoggedIn, (req, res) => {
+// NEW route
+router.get('/campgrounds/:id/comments/new', isLoggedIn, (req, res) => {
     // find campground by id
     Campground.findById(req.params.id, (err, campground) => {
         if (err) {
             console.log(err);
         } else {
-            res.render('comments/new', {campground: campground});
+            res.render('comments/new', {
+                campground: campground
+            });
         }
     });
 });
@@ -23,25 +25,33 @@ const Comment = require('../models/comment');
 router.post('/campgrounds/:id/comments', isLoggedIn, (req, res) => {
     // lookup campground by id
     Campground.findById(req.params.id, (err, campground) => {
-       if (err) {
-           console.log(err);
-           res.redirect('/campgrounds');
-       } else {
-           // create new comment
-           Comment.create(req.body.comment, (err, comment) => {
-               if (err) {
-                   console.log(err);
-               } else {
-                   // connect new campground to comment
-                   campground.comments.push(comment);
-                   // save the data
-                   campground.save();
-                   // redirect to campground show page
-                   res.redirect('/campgrounds/' + campground._id);
-               }
-           });
+        if (err) {
+            console.log(err);
+            res.redirect('/campgrounds');
+        } else {
+            // create new comment
+            Comment.create(req.body.comment, (err, comment) => {
+                if (err) {
+                    console.log(err);
+                } else {
+                    // add username and and id to comment
+                    comment.author.id = req.user._id;
+                    comment.author.username = req.user.username;
+                    // save comment
+                    comment.save();
+                    // connect new campground to comment
+                    campground.comments.push(comment);
+                    // save the data
+                    campground.save();
 
-       }
+                    console.log(comment);
+
+                    // redirect to campground show page
+                    res.redirect('/campgrounds/' + campground._id);
+                }
+            });
+
+        }
     });
 });
 
