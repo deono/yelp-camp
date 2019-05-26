@@ -1,6 +1,8 @@
 // routes/comments.js
 const express = require('express');
-const router = express.Router({mergeParams: true});
+const router = express.Router({
+    mergeParams: true
+});
 const Campground = require('../models/campground');
 const Comment = require('../models/comment');
 // ==================================================================================
@@ -21,7 +23,7 @@ router.get('/new', isLoggedIn, (req, res) => {
     });
 });
 
-// CREATE COMMETNS route
+// CREATE COMMENTS route
 router.post('/', isLoggedIn, (req, res) => {
     // lookup campground by id
     Campground.findById(req.params.id, (err, campground) => {
@@ -43,13 +45,47 @@ router.post('/', isLoggedIn, (req, res) => {
                     campground.comments.push(comment);
                     // save the data
                     campground.save();
-
-                    console.log(comment);
-
                     // redirect to campground show page
                     res.redirect('/campgrounds/' + campground._id);
                 }
             });
+        }
+    });
+});
+
+// EDIT COMMENTS route
+
+router.get('/:comment_id/edit', (req, res) => {
+    Comment.findById(req.params.comment_id, (err, foundComment) => {
+        if (err) {
+            res.redirect('back');
+        } else {
+            res.render('comments/edit', {
+                campground_id: req.params.id,
+                comment: foundComment
+            });
+        }
+    })
+});
+
+// UPDATE COMMENT route
+router.put('/:comment_id', (req, res) => {
+    Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, (err, updatedComment) => {
+        if(err){
+            res.redirect('back');
+        } else {
+            res.redirect('/campgrounds/' + req.params.id);
+        }
+    });
+});
+
+// DESTROY COMMENT route
+router.delete('/:comment_id', (req, res) => {
+    Comment.findByIdAndRemove(req.params.comment_id, (err) =>{
+        if(err){
+            res.redirect('back');
+        } else {
+            res.redirect('/campgrounds/' + req.params.id);
         }
     });
 });
