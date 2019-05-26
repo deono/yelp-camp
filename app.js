@@ -1,17 +1,19 @@
 // app.js
 
 // DEPENDENCIES
-const express       = require('express');
-const app           = express();
-const bodyParser    = require('body-parser');
-const mongoose      = require('mongoose');
-const passport      = require('passport');
-const LocalStrategy = require('passport-local');
-const Campground    = require('./models/campground');
-const Comment       = require('./models/comment');
-const User          = require('./models/user');
-const seedDB        = require('./seeds');
+const express           = require('express');
+const app               = express();
+const bodyParser        = require('body-parser');
+const mongoose          = require('mongoose');
+const passport          = require('passport');
+const LocalStrategy     = require('passport-local');
+const methodOverride    = require('method-override');
+const Campground        = require('./models/campground');
+const Comment           = require('./models/comment');
+const User              = require('./models/user');
+const seedDB            = require('./seeds');
 
+// requiring routes
 const commentRoutes     = require('./routes/comments');
 const campgroundRoutes  = require('./routes/campgrounds');
 const authRoutes        = require('./routes/index');
@@ -28,6 +30,7 @@ mongoose.connect("mongodb://localhost/yelp_camp");
 app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/public'));
+app.use(methodOverride('_method'));
 
 // passport config
 app.use(require('express-session')({
@@ -48,9 +51,9 @@ app.use((req, res, next) => {
 });
 
 // routes
-app.use(authRoutes);
-app.use(commentRoutes);
-app.use(campgroundRoutes);
+app.use("/", authRoutes);
+app.use("/campgrounds/:id/comments", commentRoutes);
+app.use("/campgrounds", campgroundRoutes);
 
 // seed the database
 //seedDB();
