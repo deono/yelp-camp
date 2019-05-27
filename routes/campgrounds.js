@@ -30,6 +30,7 @@ router.get('/', (req, res) => {
 router.post('/', middleware.isLoggedIn, (req, res) => {
     // get data from form 
     var name = req.body.name;
+    var price = req.body.price;
     var image = req.body.image;
     var desc = req.body.description;
     var author = {
@@ -38,6 +39,7 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
     }
     var newCampground = {
         name: name,
+        price: price,
         image: image,
         description: desc,
         author: author
@@ -48,7 +50,7 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
             console.log(err);
         } else {
             // redirect back to campgrounds page
-            console.log(newlyCreated);
+            //console.log(newlyCreated);
             res.redirect('/campgrounds');
         }
     });
