@@ -19,7 +19,8 @@ router.get('/', (req, res) => {
         } else {
             //send all results to the campgrounds route
             res.render('campgrounds/index', {
-                campgrounds: allCampgrounds
+                campgrounds: allCampgrounds,
+                page: 'campgrounds'
             });
         }
     });
@@ -66,8 +67,9 @@ router.get('/new', middleware.isLoggedIn, (req, res) => {
 router.get('/:id', (req, res) => {
     // find campground with provided id
     Campground.findById(req.params.id).populate('comments').exec((err, foundCampground) => {
-        if (err) {
-            console.log(err);
+        if (err || !foundCampground) {
+            req.flash('error', 'Campground not found.');
+            res.redirect('back');
         } else {
             //render show template with that campground
             res.render('campgrounds/show', {

@@ -18,14 +18,18 @@ router.get('/', (req, res) => {
 // SIGNUP ROUTES
 // SHOW register form
 router.get('/register', (req, res) => {
-    res.render('register');
+    res.render('register', {
+        page: 'register'
+    });
 });
 
 // hande signup logic
 router.post('/register', (req, res) => {
-    var newUser = new User({ username : req.body.username });
+    var newUser = new User({
+        username: req.body.username
+    });
     User.register(newUser, req.body.password, (err, user) => {
-        if(err) {
+        if (err) {
             //console.log(err.message);
             req.flash('error', err.message);
             return res.redirect('/register');
@@ -40,14 +44,16 @@ router.post('/register', (req, res) => {
 // LOGIN ROUTES 
 // SHOW login form
 router.get('/login', (req, res) => {
-    res.render('login', {message: req.flash('error')});
+    res.render('login', {
+        message: req.flash('error'),
+        page: 'login'
+    });
 });
 
 // handle login logic
-router.post('/login', passport.authenticate('local', 
-{   
-    successRedirect : '/campgrounds', 
-    failureRedirect : '/login'
+router.post('/login', passport.authenticate('local', {
+    successRedirect: '/campgrounds',
+    failureRedirect: '/login'
 }), (req, res) => {
     // do stuff
 });
