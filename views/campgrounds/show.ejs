@@ -20,32 +20,38 @@
                     <h4 class="pull-right">$<%= campground.price %>/night</h4>
                     <h4><a href=""><%=campground.name%></a></h4>
                     <p><%=campground.description%></p>
-                    <p><em>Submitted by: <strong><%= campground.author.username %></strong></em></p>
-                    <% if(currentUser && campground.author.id.equals(currentUser._id)) { %>
-                        <a class="btn btn-xs btn-warning" href="/campgrounds/<%= campground._id %>/edit">Edit</a>
-                        <form class="delete-form" action="/campgrounds/<%= campground._id %>?_method=DELETE" method="post">
-                            <button class="btn btn-xs btn-danger" type="submit">Delete</button>
-                        </form>
+                    <p><em>Submitted by: <strong><a href="/users/<%= campground.author.id %>">
+                                    <%= campground.author.username %></a></strong>,
+                            <%= moment(campground.createdAt).fromNow() %></em></p>
+                    <% if((currentUser && campground.author.id.equals(currentUser._id)) || (currentUser && currentUser.isAdmin)) { %>
+                    <a class="btn btn-xs btn-warning" href="/campgrounds/<%= campground._id %>/edit">Edit</a>
+                    <form class="delete-form" action="/campgrounds/<%= campground._id %>?_method=DELETE" method="post">
+                        <button class="btn btn-xs btn-danger" type="submit">Delete</button>
+                    </form>
                     <% } %>
                 </div>
             </div>
             <div class="well">
                 <div class="text-right">
-                    <p><a class="btn btn-sm btn-success" href="/campgrounds/<%=campground._id%>/comments/new">Leave a review</a></p>
+                    <p><a class="btn btn-sm btn-success" href="/campgrounds/<%=campground._id%>/comments/new">Leave a
+                            review</a></p>
                 </div>
                 <hr>
                 <% campground.comments.forEach((comment) => { %>
                 <div class="row">
                     <div class="col-md-12">
                         <em><strong><%= comment.author.username %></strong></em>
-                        <span class="pull-right">10 days ago</span>
+                        <span class="pull-right"><%= moment(comment.createdAt).fromNow() %></span>
                         <p><%= comment.text %></p>
-                        <% if(currentUser && comment.author.id.equals(currentUser._id)) { %>
-                            <a class="btn btn-xs btn-warning" href="/campgrounds/<%= campground._id %>/comments/<%= comment._id %>/edit">Edit</a>
-                            <form class="delete-form" action="/campgrounds/<%= campground._id %>/comments/<%= comment._id %>?_method=DELETE" method="post">
-                                <button class="btn btn-xs btn-danger" type="submit">Delete</button>
-                            </form>
-                            <% } %>
+                        <% if((currentUser && comment.author.id.equals(currentUser._id)) || (currentUser && currentUser.isAdmin)) { %>
+                        <a class="btn btn-xs btn-warning"
+                            href="/campgrounds/<%= campground._id %>/comments/<%= comment._id %>/edit">Edit</a>
+                        <form class="delete-form"
+                            action="/campgrounds/<%= campground._id %>/comments/<%= comment._id %>?_method=DELETE"
+                            method="post">
+                            <button class="btn btn-xs btn-danger" type="submit">Delete</button>
+                        </form>
+                        <% } %>
                     </div>
                 </div>
                 <% }); %>
@@ -56,33 +62,37 @@
 
 
 <script>
-  function initMap() {
-    var lat = <%= campground.lat %>;
-    var lng = <%= campground.lng %>;
-    var center = {lat: lat, lng: lng };
-    var map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 8,
-        center: center,
-        scrollwheel: false
-    });
-    var contentString = `
+    function initMap() {
+        var lat = <%= campground.lat %> ;
+        var lng = <%= campground.lng %> ;
+        var center = {
+            lat: lat,
+            lng: lng
+        };
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 8,
+            center: center,
+            scrollwheel: false
+        });
+        var contentString = `
       <strong><%= campground.name %><br />
       <%= campground.location %></strong>
       <p><%= campground.description %></p>
     `
-    var infowindow = new google.maps.InfoWindow({
-      content: contentString
-    });
-    var marker = new google.maps.Marker({
-        position: center,
-        map: map
-    });
-    marker.addListener('click', function() {
-      infowindow.open(map, marker);
-    });
-  }
+        var infowindow = new google.maps.InfoWindow({
+            content: contentString
+        });
+        var marker = new google.maps.Marker({
+            position: center,
+            map: map
+        });
+        marker.addListener('click', function () {
+            infowindow.open(map, marker);
+        });
+    }
 </script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDiZRXWLTkecD2-TC7aZHFqCGBIidVOoZs&callback=initMap"></script>
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDiZRXWLTkecD2-TC7aZHFqCGBIidVOoZs&callback=initMap"></script>
 
 
 

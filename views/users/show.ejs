@@ -1,0 +1,30 @@
+<%# views/users/show.ejs %>
+<% include ../partials/header.ejs %>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="thumbnail">
+                <img class="img-responsive" src="<%=user.avatar%>" alt="<%= user.username%>'s profile image">
+                <div class="caption caption-full">
+                    <h4 class="pull-right"><a href="mailto:<%=user.email%>"><%=user.email%></a></h4>
+                    <h4><%= user.firstName + " " + user.lastName %></h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3><%= user.username + "'s Campgrounds" %></h3>
+                </div>
+                <div class="panel-body">
+                    <ul>
+                        <% campgrounds.forEach((campground) => { %>
+                        <li><a href="/campgrounds/<%= campground.id %>"><%= campground.name %></a>
+                            <% }); %>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<% include ../partials/footer.ejs %>

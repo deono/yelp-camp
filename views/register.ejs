@@ -8,12 +8,33 @@
         <div style="width: 30%; margin: 25px auto">
             <form action="/register" method="post">
                 <div class="form-group">
-                    <label for="username">Username: </label>
+                    <label for="username">*Username: </label>
                     <input type="text" class="form-control" name="username" id="username" placeholder="username">
                 </div>
                 <div class="form-group">
-                    <label for="password">Password: </label>
+                    <label for="firstName">First Name: </label>
+                    <input type="text" class="form-control" name="firstName" id="firstName" placeholder="first name">
+                </div>
+                <div class="form-group">
+                    <label for="username">Last Name: </label>
+                    <input type="text" class="form-control" name="lastName" id="lastName" placeholder="last name">
+                </div>
+                <div class="form-group">
+                    <label for="username">Email: </label>
+                    <input type="email" class="form-control" name="email" id="email" placeholder="email">
+                </div>
+                <div class="form-group">
+                    <label for="username">Avatar: </label>
+                    <input type="text" class="form-control" name="avatar" id="avatar" placeholder="avatar url">
+                </div>
+                <div class="form-group">
+                    <label for="password">*Password: </label>
                     <input type="password" class="form-control" name="password" id="password" placeholder="password">
+                </div>
+                <div class="form-group">
+                    <label for="adminCode">Admin Code:</label>
+                    <input type="password" class="form-control" name="adminCode" id="adminCode"
+                        placeholder="secret code to make new user an admin">
                 </div>
                 <button class="btn btn-lg btn-primary btn-block" type="submit">Signup!</button>
             </form>

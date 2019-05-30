@@ -1,4 +1,5 @@
 // routes/campgrounds.js
+
 const express = require('express');
 const router = express.Router();
 const Campground = require('../models/campground');

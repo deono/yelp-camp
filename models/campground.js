@@ -9,6 +9,10 @@ var campgroundSchema = new mongoose.Schema({
     price: String,
     image: String,
     description: String,
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
     location: String,
     lat: Number,
     lng: Number,
@@ -19,12 +23,10 @@ var campgroundSchema = new mongoose.Schema({
         },
         username: String
     },
-    comments: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Comment'
-        }
-    ]
+    comments: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Comment'
+    }]
 });
 
 // Compile shcema into model and export
