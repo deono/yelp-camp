@@ -3,24 +3,45 @@
 <div class="container">
     <div class="row">
         <div class="col-md-4">
-            <div class="thumbnail">
-                <img class="img-responsive" src="<%=user.avatar%>" alt="<%= user.username%>'s profile image">
-                <div class="caption caption-full">
-                    <h4 class="pull-right"><a href="mailto:<%=user.email%>"><%=user.email%></a></h4>
+            <div class="card">
+                <img class="card-img-top" src="<%=user.avatar%>" alt="<%= user.username%>'s profile image">
+                <div class="card-body">
+                    <h4 class="float-right"><a href="mailto:<%=user.email%>"><%=user.email%></a></h4>
                     <h4><%= user.firstName + " " + user.lastName %></h4>
                 </div>
             </div>
         </div>
         <div class="col-md-8">
-            <div class="panel panel-default">
-                <div class="panel-heading">
+            <div class="card">
+                <div class="card-header">
                     <h3><%= user.username + "'s Campgrounds" %></h3>
                 </div>
                 <div class="panel-body">
-                    <ul>
+                    <ul class="list-group list-group-flush">
                         <% campgrounds.forEach((campground) => { %>
-                        <li><a href="/campgrounds/<%= campground.id %>"><%= campground.name %></a>
-                            <% }); %>
+                            <li class="list-group-item">
+                            <div class="row">
+                                <div class="col-2 align-self-center">
+                                    <img src="<%= campground.image %>" alt="<%= campground.name %>" style="width: 100%">
+                                </div>
+                                <div class="col-8 align-self-center">
+                                    <a href="/campgrounds/<%= campground.id %>"><%= campground.name %></a>
+                                    <p>$<%= campground.price %>/night</p>                            
+                                </div>
+                                <div class="col-2 align-self-center">
+                                    <!-- add edit and delete buttons -->
+
+                                    <% if((currentUser && campground.author.id.equals(currentUser._id)) || (currentUser && currentUser.isAdmin)) { %>
+                                        <a class="btn btn-sm btn-outline-dark" href="/campgrounds/<%= campground._id %>/edit"><i class="fas fa-edit"></i></a>
+                                         <form class="delete-form" action="/campgrounds/<%= campground._id %>?_method=DELETE" method="post">
+                                            <button class="btn btn-sm btn-outline-dark" type="submit"><i class="fas fa-trash"></i></button>
+                                        </form>
+                                    <% } %>
+
+                                </div>                       
+                            </div>
+                            </li>
+                        <% }); %>
                     </ul>
                 </div>
             </div>

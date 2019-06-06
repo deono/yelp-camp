@@ -1,11 +1,21 @@
 /* public/stylesheets/main.css */
 
-.thumbnail img {
-    width: 100%;
+
+body {
+    font-family: 'Work Sans', sans-serif;
+    /* font-weight: 300; */
+    background-color: #f5f8fa;
 }
 
-.thumbnail {
-    padding: 0;
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Taviraj', serif;
+}
+
+.jumbotron {
+    background-image: url(https://source.unsplash.com/qelGaL2OLyE);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
 }
 
 .delete-form {
